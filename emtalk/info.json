@@ -1,0 +1,30 @@
+{
+    "name": "微话",
+    "version": "1.0.0",
+    "author": "Your Name",
+    "author_url": "",
+    "description": "现代化微语主题，基于Material Design风格，支持响应式布局和深色模式",
+    "preview": "screenshot.png",
+    "property": {
+        "logo": {
+            "type": "text",
+            "name": "网站标题",
+            "value": "微话"
+        },
+        "description": {
+            "type": "text",
+            "name": "网站描述",
+            "value": "一个现代化的微语分享平台"
+        },
+        " ICP ": {
+            "type": "text",
+            "name": "ICP备案号",
+            "value": ""
+        },
+        "statistics": {
+            "type": "textarea",
+            "name": "统计代码",
+            "value": ""
+        }
+    }
+}
