@@ -1053,6 +1053,16 @@ main {
 	text-align: right;
 }
 
+.news-link {
+	display: contents;
+	text-decoration: none;
+	color: inherit;
+}
+
+.news-link:hover span {
+	color: var(--accent);
+}
+
 .button-row,
 .runner-actions {
 	display: flex;

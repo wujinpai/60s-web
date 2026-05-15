@@ -67,6 +67,9 @@ function NewsFeedCard({
 	const items = toItems(state.data).slice(0, 8);
 	const displayItems = state.loading ? skeletonItems(8) : items;
 	const isEmpty = !state.loading && !state.error && items.length === 0;
+	
+	const getItemLink = (item: any) => item.link || item.url || null;
+	
 	return (
 		<article className="card feed-card">
 			<CardTitle
@@ -78,18 +81,30 @@ function NewsFeedCard({
 				<EmptyState title="暂无资讯" desc="接口返回为空，稍后会随缓存自动刷新。" />
 			) : (
 				<ol className="news-list">
-					{displayItems.map((item, index) => (
-						<li key={`${item.title || item.name || item.movie_name}-${index}`}>
-							<span>
-								{item.title ||
-									item.name ||
-									item.movie_name ||
-									item.desc ||
-									"正在读取资讯..."}
-							</span>
-							<time>{String(index + 1).padStart(2, "0")}</time>
-						</li>
-					))}
+					{displayItems.map((item, index) => {
+						const link = getItemLink(item);
+						const content = item.title ||
+							item.name ||
+							item.movie_name ||
+							item.desc ||
+							"正在读取资讯...";
+						
+						return (
+							<li key={`${content}-${index}`}>
+								{link ? (
+									<a href={link} target="_blank" rel="noreferrer" className="news-link">
+										<span>{content}</span>
+										<time>{String(index + 1).padStart(2, "0")}</time>
+									</a>
+								) : (
+									<>
+										<span>{content}</span>
+										<time>{String(index + 1).padStart(2, "0")}</time>
+									</>
+								)}
+							</li>
+						);
+					})}
 				</ol>
 			)}
 		</article>
