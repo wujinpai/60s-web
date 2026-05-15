@@ -3111,8 +3111,10 @@ main {
 .bing-image {
 	width: 100%;
 	display: block;
-	max-height: 50vh;
-	object-fit: cover;
+	height: auto;
+	max-height: 80vh;
+	object-fit: contain;
+	object-position: center;
 }
 
 .bing-info {
