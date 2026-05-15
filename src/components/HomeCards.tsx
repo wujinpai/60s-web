@@ -31,14 +31,12 @@ export function MarketStrip({
 	exchange,
 	lunar,
 	city,
-	showLunar = true,
 }: {
 	gold: ApiState<GoldPrice> & { reload: () => void };
 	fuel: ApiState<FuelPrice> & { reload: () => void };
 	exchange: ApiState<ExchangeRate> & { reload: () => void };
-	lunar?: ApiState<unknown> & { reload: () => void };
+	lunar: ApiState<unknown> & { reload: () => void };
 	city: string;
-	showLunar?: boolean;
 }) {
 	const metal = gold.data?.metals?.[0];
 	const fuelValue =
@@ -49,61 +47,43 @@ export function MarketStrip({
 		"--";
 	const usdRate = readCurrencyRate(exchange.data, "USD");
 	const usd = usdRate ? (1 / usdRate).toFixed(4) : "--";
-
-	let lunarDate = "--";
-	let solarTerm = "";
-	if (showLunar && lunar) {
-		const lunarData = lunar.data as Record<string, unknown> || {};
-		const lunarInfo = (lunarData.lunar as Record<string, unknown>) || {};
-		const termInfo = (lunarData.term as Record<string, unknown>) || {};
-		const stageInfo = (termInfo.stage as Record<string, unknown>) || {};
-		lunarDate = String(lunarInfo.desc_short || lunarInfo.full_with_hour || "--");
-		solarTerm = String(stageInfo.name || "");
-	}
-
-	const metrics = [
-		<Metric
-			key="gold"
-			icon={<Coins size={31} />}
-			label="金价"
-			value={metal ? `${metal.today_price}` : "--"}
-			sub={metal?.unit || "元/克"}
-			tone="gold"
-		/>,
-		<Metric
-			key="fuel"
-			icon={<Fuel size={31} />}
-			label={`${city} 92# 油价`}
-			value={fuelValue}
-			sub="元/升"
-		/>,
-		<Metric
-			key="exchange"
-			icon={<CircleDollarSign size={31} />}
-			label="美元/人民币"
-			value={String(usd).slice(0, 7)}
-			sub="实时汇率"
-			tone="red"
-		/>,
-	];
-
-	if (showLunar && lunar) {
-		metrics.push(
-			<Metric
-				key="lunar"
-				icon={<CalendarClock size={31} />}
-				label="农历"
-				value={String(lunarDate)}
-				sub={solarTerm ? `${solarTerm}` : "今日黄历"}
-			/>,
-		);
-	}
+	const lunarData = lunar.data as Record<string, unknown> || {};
+	const lunarInfo = (lunarData.lunar as Record<string, unknown>) || {};
+	const termInfo = (lunarData.term as Record<string, unknown>) || {};
+	const stageInfo = (termInfo.stage as Record<string, unknown>) || {};
+	const lunarDate = String(lunarInfo.desc_short || lunarInfo.full_with_hour || "--");
+	const solarTerm = String(stageInfo.name || "");
 
 	return (
 		<article className="card market-strip">
 			<CardTitle icon={<Gauge size={18} />} title="实用数据" />
 			<div className="market-grid">
-				{metrics}
+				<Metric
+					icon={<Coins size={31} />}
+					label="金价"
+					value={metal ? `${metal.today_price}` : "--"}
+					sub={metal?.unit || "元/克"}
+					tone="gold"
+				/>
+				<Metric
+					icon={<Fuel size={31} />}
+					label={`${city} 92# 油价`}
+					value={fuelValue}
+					sub="元/升"
+				/>
+				<Metric
+					icon={<CircleDollarSign size={31} />}
+					label="美元/人民币"
+					value={String(usd).slice(0, 7)}
+					sub="实时汇率"
+					tone="red"
+				/>
+				<Metric
+					icon={<CalendarClock size={31} />}
+					label="农历"
+					value={lunarDate}
+					sub={solarTerm ? `${solarTerm}` : "今日黄历"}
+				/>
 			</div>
 		</article>
 	);
@@ -257,6 +237,72 @@ export function ToolShortcuts({
 	);
 }
 
+export function LunarPanel({
+	lunar,
+}: {
+	lunar: ApiState<unknown> & { reload: () => void };
+}) {
+	const lunarData = (lunar.data as Record<string, unknown>) || {};
+	const lunarInfo = (lunarData.lunar as Record<string, unknown>) || {};
+	const solar = (lunarData.solar as Record<string, unknown>) || {};
+	const term = (lunarData.term as Record<string, unknown>) || {};
+	const stage = (term.stage as Record<string, unknown>) || {};
+	const zodiac = (lunarData.zodiac as Record<string, unknown>) || {};
+	const sixtyCycle = (lunarData.sixty_cycle as Record<string, unknown>) || {};
+	const dayCycle = (sixtyCycle.day as Record<string, unknown>) || {};
+	const taboo = (lunarData.taboo as Record<string, unknown>) || {};
+	const tabooDay = (taboo.day as Record<string, unknown>) || {};
+	const fortune = (lunarData.fortune as Record<string, unknown>) || {};
+
+	const lunarDate = String(lunarInfo.desc_short || lunarInfo.full_with_hour || "--");
+	const yearDesc = String(lunarInfo.year_desc || "");
+	const zodiacYear = String(zodiac.year || "");
+	const dayOfWeek = String(solar.week_desc || "");
+	const currentTerm = String(stage.name || "");
+	const dayGanZhi = String(dayCycle.name_short || dayCycle.name || "");
+	const suit = String(tabooDay.recommends || "");
+	const avoid = String(tabooDay.avoids || "");
+	const todayLuck = String(fortune.today_luck || "");
+
+	return (
+		<article className="card market-strip">
+			<CardTitle icon={<CalendarClock size={18} />} title="农历信息" />
+			<div className="market-grid">
+				<Metric
+					icon={<CalendarClock size={31} />}
+					label="农历日期"
+					value={lunarDate}
+					sub={yearDesc && zodiacYear ? `${yearDesc} · ${zodiacYear}年` : "今日黄历"}
+				/>
+				<Metric
+					icon={<CalendarClock size={31} />}
+					label="星期"
+					value={dayOfWeek}
+					sub={currentTerm || "今日宜忌"}
+				/>
+				<Metric
+					icon={<CalendarClock size={31} />}
+					label="干支"
+					value={dayGanZhi}
+					sub={todayLuck || "运势"}
+				/>
+			</div>
+			{suit && (
+				<div className="market-strip-extra">
+					<span className="label">宜</span>
+					<span className="value">{suit}</span>
+				</div>
+			)}
+			{avoid && (
+				<div className="market-strip-extra">
+					<span className="label">忌</span>
+					<span className="value">{avoid}</span>
+				</div>
+			)}
+		</article>
+	);
+}
+
 export function QuoteCard({ data }: { data?: unknown }) {
 	const text =
 		typeof data === "string"
@@ -271,7 +317,7 @@ export function QuoteCard({ data }: { data?: unknown }) {
 
 	return (
 		<article className="quote-card">
-			<span>“</span>
+			<span>"</span>
 			<p>{text}</p>
 			<small>60s API 随机一言</small>
 		</article>

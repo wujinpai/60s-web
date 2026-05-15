@@ -28,7 +28,7 @@ import { BingPage } from "./components/BingPage";
 import { EndpointLab } from "./components/EndpointLab";
 import { Header } from "./components/Header";
 import { HotPage } from "./components/Hot";
-import { MarketStrip } from "./components/HomeCards";
+import { MarketStrip, LunarPanel } from "./components/HomeCards";
 import { HomePage } from "./components/HomePage";
 import { MobileNav } from "./components/MobileBottomNav";
 import { NewsPage } from "./components/News";
@@ -1009,72 +1009,16 @@ function ToolsPage({
 	endpointFavorites: EndpointFavoriteId[];
 	setEndpointFavorites: (favorites: EndpointFavoriteId[]) => void;
 }) {
-	const lunarData = lunar.data as Record<string, unknown> || {};
-	const lunarInfo = (lunarData.lunar as Record<string, unknown>) || {};
-	const solar = (lunarData.solar as Record<string, unknown>) || {};
-	const term = (lunarData.term as Record<string, unknown>) || {};
-	const stage = (term.stage as Record<string, unknown>) || {};
-	const zodiac = (lunarData.zodiac as Record<string, unknown>) || {};
-	const sixtyCycle = (lunarData.sixty_cycle as Record<string, unknown>) || {};
-	const dayCycle = (sixtyCycle.day as Record<string, unknown>) || {};
-	const taboo = (lunarData.taboo as Record<string, unknown>) || {};
-	const tabooDay = (taboo.day as Record<string, unknown>) || {};
-	const fortune = (lunarData.fortune as Record<string, unknown>) || {};
-
-	const lunarDate = String(lunarInfo.desc_short || lunarInfo.full_with_hour || "--");
-	const yearDesc = String(lunarInfo.year_desc || "");
-	const zodiacYear = String(zodiac.year || "");
-	const dayOfWeek = String(solar.week_desc || "");
-	const currentTerm = String(stage.name || "");
-	const dayGanZhi = String(dayCycle.name || "");
-	const suit = String(tabooDay.recommends || "");
-	const avoid = String(tabooDay.avoids || "");
-	const todayLuck = String(fortune.today_luck || "");
-
 	return (
 		<section className="page-stack">
 			<div className="page-title">
 				<span>
-					<LayoutGrid size={24} /> 工具中心
+					< LayoutGrid size={24} /> 工具中心
 				</span>
 				<small>实用数据置顶，四个便捷工具平铺展示</small>
 			</div>
-			<MarketStrip gold={gold} fuel={fuel} exchange={exchange} city={city} showLunar={false} />
-			<article className="card market-strip">
-				<CardTitle icon={<CalendarClock size={18} />} title="农历信息" />
-				<div className="market-grid">
-					<Metric
-						icon={<CalendarClock size={31} />}
-						label="农历日期"
-						value={lunarDate}
-						sub={yearDesc && zodiacYear ? `${yearDesc} · ${zodiacYear}年` : "今日黄历"}
-					/>
-					<Metric
-						icon={<CalendarClock size={31} />}
-						label="星期"
-						value={dayOfWeek}
-						sub={currentTerm || "今日宜忌"}
-					/>
-					<Metric
-						icon={<CalendarClock size={31} />}
-						label="干支"
-						value={dayGanZhi}
-						sub={todayLuck || "运势"}
-					/>
-				</div>
-				{suit && (
-					<div className="market-strip-extra">
-						<span className="label">宜</span>
-						<span className="value">{suit}</span>
-					</div>
-				)}
-				{avoid && (
-					<div className="market-strip-extra">
-						<span className="label">忌</span>
-						<span className="value">{avoid}</span>
-					</div>
-				)}
-			</article>
+			<MarketStrip gold={gold} fuel={fuel} exchange={exchange} lunar={lunar} city={city} />
+			<LunarPanel lunar={lunar} />
 			<ToolWorkspace apiBase={apiBase} activeTool={activeTool} />
 			{query.trim() && (
 				<div className="card tool-query-tip">
