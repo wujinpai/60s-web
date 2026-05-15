@@ -52,6 +52,7 @@ export const nav = [
 	{ id: "home" as const, label: "首页", icon: Home },
 	{ id: "hot" as const, label: "热榜", icon: BarChart3 },
 	{ id: "news" as const, label: "新闻", icon: Newspaper },
+	{ id: "bing" as const, label: "每日一图", icon: Image },
 	{ id: "weather" as const, label: "天气", icon: CloudSun },
 	{ id: "tools" as const, label: "工具", icon: LayoutGrid },
 	{ id: "settings" as const, label: "设置", icon: Settings },
