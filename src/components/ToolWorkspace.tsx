@@ -460,15 +460,32 @@ function LunarTool({ apiBase }: { apiBase: string }) {
 		void run();
 	}, [run]);
 
-	const lunarData = result.data || {};
-	const lunarDate =
-		String(lunarData.lunar_date || lunarData.lunar || "--") || "--";
-	const solarTerm = String(lunarData.jieqi || lunarData.term || "");
-	const yearGanZhi = String(lunarData.year_ganzhi || lunarData.year_gz || "");
-	const zodiac = String(lunarData.zodiac || "");
-	const dayOfWeek = String(lunarData.day_of_week || "");
-	const suit = String(lunarData.suit || "");
-	const avoid = String(lunarData.avoid || "");
+	const data = result.data || {};
+	const lunar = (data.lunar as Record<string, unknown>) || {};
+	const solar = (data.solar as Record<string, unknown>) || {};
+	const term = (data.term as Record<string, unknown>) || {};
+	const zodiac = (data.zodiac as Record<string, unknown>) || {};
+	const sixtyCycle = (data.sixty_cycle as Record<string, unknown>) || {};
+	const taboo = (data.taboo as Record<string, unknown>) || {};
+	const tabooDay = (taboo.day as Record<string, unknown>) || {};
+	const fortune = (data.fortune as Record<string, unknown>) || {};
+
+	const lunarDate = String(lunar.desc_short || lunar.full_with_hour || "--");
+	const yearDesc = String(lunar.year_desc || "");
+	const zodiacYear = String(zodiac.year || "");
+	const zodiacMonth = String(zodiac.month || "");
+	const zodiacDay = String(zodiac.day || "");
+	const currentSeason = String(solar.season_name_desc || "");
+	const currentTerm = String((term.stage as Record<string, unknown>)?.name || "");
+	const dayOfWeek = String(solar.week_desc || "");
+	const constellation = String((data.constellation as Record<string, unknown>)?.name || "");
+	const nayinYear = String((data.nayin as Record<string, unknown>)?.year || "");
+	const suit = String(tabooDay.recommends || "");
+	const avoid = String(tabooDay.avoids || "");
+	const todayLuck = String(fortune.today_luck || "");
+	const career = String(fortune.career || "");
+	const money = String(fortune.money || "");
+	const love = String(fortune.love || "");
 
 	return (
 		<article className="card tool-panel">
@@ -502,23 +519,36 @@ function LunarTool({ apiBase }: { apiBase: string }) {
 					<div className="tool-result-card">
 						<small>农历日期</small>
 						<b>{lunarDate}</b>
-						{yearGanZhi && <em>{yearGanZhi}年{zodiac}</em>}
+						{yearDesc && zodiacYear && <em>{yearDesc} · {zodiacYear}年</em>}
 					</div>
-					{solarTerm && (
-						<div className="tool-result-card">
-							<small>节气</small>
-							<b>{solarTerm}</b>
-							<em>二十四节气</em>
-						</div>
-					)}
 					{dayOfWeek && (
 						<div className="tool-result-card">
 							<small>星期</small>
 							<b>{dayOfWeek}</b>
-							<em>今日星期</em>
+							<em>{currentSeason}</em>
+						</div>
+					)}
+					{currentTerm && (
+						<div className="tool-result-card">
+							<small>节气</small>
+							<b>{currentTerm}</b>
+							<em>二十四节气</em>
+						</div>
+					)}
+					{constellation && (
+						<div className="tool-result-card">
+							<small>星座</small>
+							<b>{constellation}</b>
+							<em>{zodiacMonth}月{zodiacDay}日</em>
 						</div>
 					)}
 				</div>
+				{nayinYear && (
+					<div className="tool-result-card">
+						<small>纳音</small>
+						<b>{nayinYear}</b>
+					</div>
+				)}
 				{suit && (
 					<div className="tool-result-card">
 						<small>宜</small>
@@ -529,6 +559,15 @@ function LunarTool({ apiBase }: { apiBase: string }) {
 					<div className="tool-result-card">
 						<small>忌</small>
 						<b>{avoid}</b>
+					</div>
+				)}
+				{todayLuck && (
+					<div className="tool-result-card">
+						<small>今日运势</small>
+						<b>{todayLuck}</b>
+						{career && <em>事业: {career}</em>}
+						{money && <em>财运: {money}</em>}
+						{love && <em>爱情: {love}</em>}
 					</div>
 				)}
 			</div>
