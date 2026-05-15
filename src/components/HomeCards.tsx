@@ -31,12 +31,14 @@ export function MarketStrip({
 	exchange,
 	lunar,
 	city,
+	showLunar = true,
 }: {
 	gold: ApiState<GoldPrice> & { reload: () => void };
 	fuel: ApiState<FuelPrice> & { reload: () => void };
 	exchange: ApiState<ExchangeRate> & { reload: () => void };
-	lunar: ApiState<unknown> & { reload: () => void };
+	lunar?: ApiState<unknown> & { reload: () => void };
 	city: string;
+	showLunar?: boolean;
 }) {
 	const metal = gold.data?.metals?.[0];
 	const fuelValue =
@@ -47,40 +49,61 @@ export function MarketStrip({
 		"--";
 	const usdRate = readCurrencyRate(exchange.data, "USD");
 	const usd = usdRate ? (1 / usdRate).toFixed(4) : "--";
-	const lunarData = lunar.data as Record<string, unknown>;
-	const lunarDate = lunarData?.lunar_date || lunarData?.lunar || "--";
-	const solarTerm = lunarData?.jieqi || lunarData?.term || "";
+
+	let lunarDate = "--";
+	let solarTerm = "";
+	if (showLunar && lunar) {
+		const lunarData = lunar.data as Record<string, unknown> || {};
+		const lunarInfo = (lunarData.lunar as Record<string, unknown>) || {};
+		const termInfo = (lunarData.term as Record<string, unknown>) || {};
+		const stageInfo = (termInfo.stage as Record<string, unknown>) || {};
+		lunarDate = String(lunarInfo.desc_short || lunarInfo.full_with_hour || "--");
+		solarTerm = String(stageInfo.name || "");
+	}
+
+	const metrics = [
+		<Metric
+			key="gold"
+			icon={<Coins size={31} />}
+			label="金价"
+			value={metal ? `${metal.today_price}` : "--"}
+			sub={metal?.unit || "元/克"}
+			tone="gold"
+		/>,
+		<Metric
+			key="fuel"
+			icon={<Fuel size={31} />}
+			label={`${city} 92# 油价`}
+			value={fuelValue}
+			sub="元/升"
+		/>,
+		<Metric
+			key="exchange"
+			icon={<CircleDollarSign size={31} />}
+			label="美元/人民币"
+			value={String(usd).slice(0, 7)}
+			sub="实时汇率"
+			tone="red"
+		/>,
+	];
+
+	if (showLunar && lunar) {
+		metrics.push(
+			<Metric
+				key="lunar"
+				icon={<CalendarClock size={31} />}
+				label="农历"
+				value={String(lunarDate)}
+				sub={solarTerm ? `${solarTerm}` : "今日黄历"}
+			/>,
+		);
+	}
 
 	return (
 		<article className="card market-strip">
 			<CardTitle icon={<Gauge size={18} />} title="实用数据" />
 			<div className="market-grid">
-				<Metric
-					icon={<Coins size={31} />}
-					label="金价"
-					value={metal ? `${metal.today_price}` : "--"}
-					sub={metal?.unit || "元/克"}
-					tone="gold"
-				/>
-				<Metric
-					icon={<Fuel size={31} />}
-					label={`${city} 92# 油价`}
-					value={fuelValue}
-					sub="元/升"
-				/>
-				<Metric
-					icon={<CircleDollarSign size={31} />}
-					label="美元/人民币"
-					value={String(usd).slice(0, 7)}
-					sub="实时汇率"
-					tone="red"
-				/>
-				<Metric
-					icon={<CalendarClock size={31} />}
-					label="农历"
-					value={String(lunarDate)}
-					sub={solarTerm ? `${solarTerm}` : "今日黄历"}
-				/>
+				{metrics}
 			</div>
 		</article>
 	);
