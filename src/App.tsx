@@ -24,6 +24,7 @@ import {
 	normalizeHomeCardLayout,
 	type HomeCardLayout,
 } from "./cards";
+import { BingPage } from "./components/BingPage";
 import { EndpointLab } from "./components/EndpointLab";
 import { Header } from "./components/Header";
 import { HotPage } from "./components/Hot";
@@ -834,6 +835,7 @@ export function App() {
 					<HotPage apiBase={apiBase} />
 				)}
 				{activePage === "news" && <NewsPage apiBase={apiBase} daily={daily} />}
+				{activePage === "bing" && <BingPage apiBase={apiBase} />}
 				{activePage === "weather" && (
 					<WeatherPage
 						city={city}

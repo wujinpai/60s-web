@@ -1,4 +1,4 @@
-export const DEFAULT_API_BASE = "https://60s.viki.moe/v2";
+export const DEFAULT_API_BASE = "https://60s.gii.cn/v2";
 
 export type ApiCategory =
 	| "periodic"

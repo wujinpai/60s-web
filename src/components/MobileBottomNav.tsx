@@ -1,7 +1,7 @@
 import { nav } from "../config";
 import type { PageId } from "../types";
 
-const mobilePages: PageId[] = ["home", "hot", "news", "weather", "tools"];
+const mobilePages: PageId[] = ["home", "hot", "news", "bing", "weather", "tools"];
 
 export function MobileNav({
 	activePage,

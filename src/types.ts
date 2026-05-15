@@ -14,7 +14,7 @@ export type SettingsState = {
 	autoRefresh: boolean;
 };
 
-export type PageId = "home" | "hot" | "news" | "weather" | "tools" | "settings";
+export type PageId = "home" | "hot" | "news" | "bing" | "weather" | "tools" | "settings";
 export type ToolId = "translate" | "qrcode" | "password" | "palette";
 export type SearchProviderId = "site" | "bing" | "google" | "chatgpt" | "doubao";
 export type EndpointFavoriteId = string;
