@@ -1,19 +1,22 @@
 import { Download, ExternalLink, Image, RefreshCw } from "lucide-react";
 import { useApi } from "../hooks/useApi";
-import { CardTitle, EmptyState, Status } from "./ui";
+import { CardTitle, EmptyState } from "./ui";
 
 export type BingWallpaper = {
-	url?: string;
-	image_url?: string;
-	copyright?: string;
-	copyright_link?: string;
-	description?: string;
 	title?: string;
+	headline?: string;
+	description?: string;
+	main_text?: string;
+	cover?: string;
+	cover_4k?: string;
+	copyright?: string;
+	update_date?: string;
+	update_date_at?: number;
 };
 
 export function BingPage({ apiBase }: { apiBase: string }) {
 	const bing = useApi<BingWallpaper>(apiBase, "/bing", {}, true);
-	const imageUrl = bing.data?.url || bing.data?.image_url;
+	const imageUrl = bing.data?.cover_4k || bing.data?.cover;
 
 	const handleDownload = () => {
 		if (!imageUrl) return;
@@ -29,14 +32,22 @@ export function BingPage({ apiBase }: { apiBase: string }) {
 				<span>
 					<Image size={24} /> 每日一图
 				</span>
-				<Status state={bing} />
 			</div>
 			<article className="card bing-card">
 				<CardTitle
 					icon={<Image size={22} />}
 					title="Bing 每日壁纸"
-					right={
-						<div className="button-row">
+				/>
+				{bing.loading ? (
+					<div className="bing-loading">
+						<div className="loading-spinner" />
+						<span>加载中...</span>
+					</div>
+				) : bing.error ? (
+					<EmptyState title="加载失败" desc={bing.error} />
+				) : imageUrl ? (
+					<>
+						<div className="bing-actions">
 							{imageUrl && (
 								<>
 									<button className="outline-button" onClick={handleDownload}>
@@ -56,45 +67,30 @@ export function BingPage({ apiBase }: { apiBase: string }) {
 								<RefreshCw size={17} /> 刷新
 							</button>
 						</div>
-					}
-				/>
-				{bing.loading ? (
-					<div className="bing-loading">
-						<div className="loading-spinner" />
-						<span>加载中...</span>
-					</div>
-				) : bing.error ? (
-					<EmptyState title="加载失败" desc={bing.error} />
-				) : imageUrl ? (
-					<div className="bing-image-container">
-						<img
-							src={imageUrl}
-							alt={bing.data?.title || "Bing 每日壁纸"}
-							className="bing-image"
-						/>
+						<div className="bing-image-container">
+							<img
+								src={imageUrl}
+								alt={bing.data?.title || "Bing 每日壁纸"}
+								className="bing-image"
+							/>
+						</div>
 						<div className="bing-info">
+							{bing.data?.headline && <h4 className="bing-headline">{bing.data.headline}</h4>}
 							{bing.data?.title && <h3>{bing.data.title}</h3>}
 							{bing.data?.description && (
 								<p className="bing-description">{bing.data.description}</p>
 							)}
+							{bing.data?.main_text && (
+								<p className="bing-main-text">{bing.data.main_text}</p>
+							)}
 							{bing.data?.copyright && (
-								<p className="bing-copyright">
-									来源:{" "}
-									{bing.data.copyright_link ? (
-										<a
-											href={bing.data.copyright_link}
-											target="_blank"
-											rel="noreferrer"
-										>
-											{bing.data.copyright}
-										</a>
-									) : (
-										bing.data.copyright
-									)}
-								</p>
+								<p className="bing-copyright">来源: {bing.data.copyright}</p>
+							)}
+							{bing.data?.update_date && (
+								<p className="bing-update-date">更新时间: {bing.data.update_date}</p>
 							)}
 						</div>
-					</div>
+					</>
 				) : (
 					<EmptyState
 						title="暂无图片"
