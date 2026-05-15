@@ -107,10 +107,10 @@ export function Header({
 			<button
 				className="brand"
 				onClick={() => setActivePage("home")}
-				aria-label="60s 信息聚合首页"
+				aria-label="每日热点要闻首页"
 			>
-				<img src="/favicon.png" alt="60s logo" width={24} height={24} />
-				<strong>60s 信息聚合</strong>
+				<img src="/favicon.png" alt="logo" width={24} height={24} />
+				<strong>每日热点要闻</strong>
 			</button>
 			<nav>
 				{nav.map((item) => {

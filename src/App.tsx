@@ -87,7 +87,7 @@ import {
 	shouldShowIosInstallHint,
 } from "./pwa";
 
-const DEFAULT_CITY = "上海";
+const DEFAULT_CITY = "遵义";
 const DEFAULT_SEARCH_PROVIDER: SearchProviderId = "site";
 const DEFAULT_CHROME_THEME: ChromeTheme = "minimal";
 const DEFAULT_COLOR_THEME: ColorTheme = "light";
