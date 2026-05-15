@@ -28,11 +28,6 @@ export function BingPage({ apiBase }: { apiBase: string }) {
 
 	return (
 		<section className="page-stack">
-			<div className="page-title">
-				<span>
-					<Image size={24} /> 每日一图
-				</span>
-			</div>
 			<article className="card bing-card">
 				<CardTitle
 					icon={<Image size={22} />}

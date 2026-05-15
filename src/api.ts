@@ -427,7 +427,7 @@ export const endpoints: EndpointDefinition[] = [
 			{
 				name: "text",
 				label: "内容",
-				defaultValue: "https://github.com/vikiboss/60s",
+				defaultValue: "https://hot.gii.cn",
 				required: true,
 			},
 			{ name: "size", label: "尺寸", defaultValue: "256" },
