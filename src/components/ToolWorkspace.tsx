@@ -163,7 +163,7 @@ function TranslateTool({ apiBase }: { apiBase: string }) {
 }
 
 function QrcodeTool({ apiBase }: { apiBase: string }) {
-	const [text, setText] = useState(API_REPO_URL);
+	const [text, setText] = useState("https://hot.gii.cn");
 	const [result, setResult] = useState<ApiState<QrCodeResult>>({
 		loading: false,
 	});
