@@ -31,64 +31,59 @@ export function ToolWorkspace({
 		activeTool,
 		...toolDefinitions
 			.map((tool) => tool.id)
-			.filter((toolId) => toolId !== activeTool),
+			.filter((toolId) => toolId !== activeTool && toolId !== "lunar"),
 	] as ToolId[];
 
 	return (
-		<div className="tool-workspace tool-workspace-grid">
-			{orderedTools.map((toolId) => {
-				if (toolId === "translate") {
-					return (
-						<div
-							key={toolId}
-							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-						>
-							<TranslateTool apiBase={apiBase} />
-						</div>
-					);
-				}
-				if (toolId === "qrcode") {
-					return (
-						<div
-							key={toolId}
-							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-						>
-							<QrcodeTool apiBase={apiBase} />
-						</div>
-					);
-				}
-				if (toolId === "password") {
-					return (
-						<div
-							key={toolId}
-							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-						>
-							<PasswordTool apiBase={apiBase} />
-						</div>
-					);
-				}
-				if (toolId === "palette") {
-					return (
-						<div
-							key={toolId}
-							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-						>
-							<PaletteTool apiBase={apiBase} />
-						</div>
-					);
-				}
-				if (toolId === "lunar") {
-					return (
-						<div
-							key={toolId}
-							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-						>
-							<LunarTool apiBase={apiBase} />
-						</div>
-					);
-				}
-				return null;
-			})}
+		<div className="tool-workspace">
+			<div className={`tool-panel-wrap ${activeTool === "lunar" ? "featured" : ""}`}>
+				<LunarTool apiBase={apiBase} />
+			</div>
+			<div className="tool-workspace-grid">
+				{orderedTools.map((toolId) => {
+					if (toolId === "translate") {
+						return (
+							<div
+								key={toolId}
+								className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+							>
+								<TranslateTool apiBase={apiBase} />
+							</div>
+						);
+					}
+					if (toolId === "qrcode") {
+						return (
+							<div
+								key={toolId}
+								className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+							>
+								<QrcodeTool apiBase={apiBase} />
+							</div>
+						);
+					}
+					if (toolId === "password") {
+						return (
+							<div
+								key={toolId}
+								className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+							>
+								<PasswordTool apiBase={apiBase} />
+							</div>
+						);
+					}
+					if (toolId === "palette") {
+						return (
+							<div
+								key={toolId}
+								className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+							>
+								<PaletteTool apiBase={apiBase} />
+							</div>
+						);
+					}
+					return null;
+				})}
+			</div>
 		</div>
 	);
 }

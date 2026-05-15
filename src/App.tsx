@@ -1018,7 +1018,6 @@ function ToolsPage({
 				<small>实用数据置顶，四个便捷工具平铺展示</small>
 			</div>
 			<MarketStrip gold={gold} fuel={fuel} exchange={exchange} lunar={lunar} city={city} />
-			<LunarPanel lunar={lunar} />
 			<ToolWorkspace apiBase={apiBase} activeTool={activeTool} />
 			{query.trim() && (
 				<div className="card tool-query-tip">
