@@ -24,6 +24,13 @@ export function HotPage({
 		{ title: "百度热搜", path: "/baidu/hot" },
 		{ title: "小红书热点", path: "/rednote" },
 		{ title: "Hacker News", path: "/hacker-news/top", params: { limit: "12" } },
+		{ title: "百度贴吧", path: "/baidu/tieba" },
+		{ title: "夸克热点", path: "/quark" },
+		{ title: "懂车帝", path: "/dongchedi" },
+		{ title: "猫眼电影", path: "/maoyan/realtime/movie" },
+		{ title: "豆瓣电影", path: "/douban/weekly/movie" },
+		{ title: "网易云音乐", path: "/ncm-rank/list" },
+		{ title: "虎扑热榜", path: "/hupu" },
 	];
 
 	return (
