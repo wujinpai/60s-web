@@ -236,6 +236,12 @@ export const toolDefinitions: ToolDefinition[] = [
 		label: "配色",
 		sub: "色彩搭配",
 	},
+	{
+		id: "lunar",
+		icon: CalendarClock,
+		label: "农历",
+		sub: "农历黄历信息",
+	},
 ];
 
 export const EPIC_COVER_PLACEHOLDER =

@@ -30,7 +30,6 @@ export function HotPage({
 		{ title: "猫眼电影", path: "/maoyan/realtime/movie" },
 		{ title: "豆瓣电影", path: "/douban/weekly/movie" },
 		{ title: "网易云音乐", path: "/ncm-rank/list" },
-		{ title: "虎扑热榜", path: "/hupu" },
 	];
 
 	return (

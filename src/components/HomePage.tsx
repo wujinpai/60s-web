@@ -53,6 +53,7 @@ type HomePageProps = {
 	gold: ApiState<GoldPrice> & { reload: () => void };
 	fuel: ApiState<FuelPrice> & { reload: () => void };
 	exchange: ApiState<ExchangeRate> & { reload: () => void };
+	lunar: ApiState<unknown> & { reload: () => void };
 	hotTab: (typeof hotTabs)[number];
 	setHotTab: (tab: (typeof hotTabs)[number]) => void;
 	hot: ApiState<unknown> & { reload: () => void };
@@ -79,6 +80,7 @@ export function HomePage({
 	gold,
 	fuel,
 	exchange,
+	lunar,
 	hotTab,
 	setHotTab,
 	hot,
@@ -308,7 +310,7 @@ export function HomePage({
 			);
 		}
 		if (cardId === "market") {
-			return <MarketStrip gold={gold} fuel={fuel} exchange={exchange} city={city} />;
+			return <MarketStrip gold={gold} fuel={fuel} exchange={exchange} lunar={lunar} city={city} />;
 		}
 		if (cardId === "entertainmentTools") {
 			return (

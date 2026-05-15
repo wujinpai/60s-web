@@ -15,7 +15,7 @@ export type SettingsState = {
 };
 
 export type PageId = "home" | "hot" | "news" | "bing" | "weather" | "tools" | "settings";
-export type ToolId = "translate" | "qrcode" | "password" | "palette";
+export type ToolId = "translate" | "qrcode" | "password" | "palette" | "lunar";
 export type SearchProviderId = "site" | "bing" | "google" | "chatgpt" | "doubao";
 export type EndpointFavoriteId = string;
 export type QuickFavoriteId =

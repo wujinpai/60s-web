@@ -1,4 +1,5 @@
 import {
+	CalendarClock,
 	Copy,
 	KeyRound,
 	Languages,
@@ -66,14 +67,27 @@ export function ToolWorkspace({
 						</div>
 					);
 				}
-				return (
-					<div
-						key={toolId}
-						className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
-					>
-						<PaletteTool apiBase={apiBase} />
-					</div>
-				);
+				if (toolId === "palette") {
+					return (
+						<div
+							key={toolId}
+							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+						>
+							<PaletteTool apiBase={apiBase} />
+						</div>
+					);
+				}
+				if (toolId === "lunar") {
+					return (
+						<div
+							key={toolId}
+							className={`tool-panel-wrap ${toolId === activeTool ? "featured" : ""}`}
+						>
+							<LunarTool apiBase={apiBase} />
+						</div>
+					);
+				}
+				return null;
 			})}
 		</div>
 	);
@@ -410,6 +424,113 @@ function PaletteTool({ apiBase }: { apiBase: string }) {
 						</div>
 					))}
 				</div>
+			</div>
+		</article>
+	);
+}
+
+function LunarTool({ apiBase }: { apiBase: string }) {
+	const [date, setDate] = useState("");
+	const [result, setResult] = useState<ApiState<Record<string, unknown>>>({
+		loading: false,
+	});
+
+	const run = useCallback(async () => {
+		setResult({ loading: true });
+		try {
+			const payload = await fetchApi<Record<string, unknown>>(
+				apiBase,
+				"/lunar",
+				date ? { date } : {},
+			);
+			setResult({
+				loading: false,
+				data: unwrap(payload),
+				updatedAt: new Date(),
+			});
+		} catch (error) {
+			setResult({
+				loading: false,
+				error: error instanceof Error ? error.message : "请求失败",
+			});
+		}
+	}, [apiBase, date]);
+
+	useEffect(() => {
+		void run();
+	}, [run]);
+
+	const lunarData = result.data || {};
+	const lunarDate =
+		String(lunarData.lunar_date || lunarData.lunar || "--") || "--";
+	const solarTerm = String(lunarData.jieqi || lunarData.term || "");
+	const yearGanZhi = String(lunarData.year_ganzhi || lunarData.year_gz || "");
+	const zodiac = String(lunarData.zodiac || "");
+	const dayOfWeek = String(lunarData.day_of_week || "");
+	const suit = String(lunarData.suit || "");
+	const avoid = String(lunarData.avoid || "");
+
+	return (
+		<article className="card tool-panel">
+			<CardTitle
+				icon={<CalendarClock size={20} />}
+				title="农历信息"
+				right={<Status state={result} />}
+			/>
+			<div className="tool-panel-body">
+				<div className="tool-form">
+					<label>
+						<span>查询日期</span>
+						<input
+							type="date"
+							value={date}
+							onChange={(event) => setDate(event.target.value)}
+							placeholder="留空查询今天"
+						/>
+					</label>
+				</div>
+				<div className="tool-actions">
+					<button
+						type="button"
+						className="primary-subtle"
+						onClick={() => void run()}
+					>
+						<RefreshCw size={16} /> 查询
+					</button>
+				</div>
+				<div className="tool-result-grid">
+					<div className="tool-result-card">
+						<small>农历日期</small>
+						<b>{lunarDate}</b>
+						{yearGanZhi && <em>{yearGanZhi}年{zodiac}</em>}
+					</div>
+					{solarTerm && (
+						<div className="tool-result-card">
+							<small>节气</small>
+							<b>{solarTerm}</b>
+							<em>二十四节气</em>
+						</div>
+					)}
+					{dayOfWeek && (
+						<div className="tool-result-card">
+							<small>星期</small>
+							<b>{dayOfWeek}</b>
+							<em>今日星期</em>
+						</div>
+					)}
+				</div>
+				{suit && (
+					<div className="tool-result-card">
+						<small>宜</small>
+						<b>{suit}</b>
+					</div>
+				)}
+				{avoid && (
+					<div className="tool-result-card">
+						<small>忌</small>
+						<b>{avoid}</b>
+					</div>
+				)}
 			</div>
 		</article>
 	);

@@ -432,6 +432,13 @@ export function App() {
 		true,
 		settings.autoRefresh,
 	);
+	const lunar = useApi<unknown>(
+		apiBase,
+		"/lunar",
+		{},
+		true,
+		settings.autoRefresh,
+	);
 
 	const hotItems = useMemo(() => toItems(hot.data).slice(0, 10), [hot.data]);
 	const movieItems = useMemo(
@@ -818,6 +825,7 @@ export function App() {
 						gold={gold}
 						fuel={fuel}
 						exchange={exchange}
+						lunar={lunar}
 						hotTab={hotTab}
 						setHotTab={setHotTab}
 						hot={hot}
@@ -851,6 +859,7 @@ export function App() {
 						gold={gold}
 						fuel={fuel}
 						exchange={exchange}
+						lunar={lunar}
 						city={city}
 						activeTool={activeTool}
 						setActiveTool={setActiveTool}
@@ -980,6 +989,7 @@ function ToolsPage({
 	gold,
 	fuel,
 	exchange,
+	lunar,
 	city,
 	activeTool,
 	setActiveTool,
@@ -991,6 +1001,7 @@ function ToolsPage({
 	gold: ApiState<GoldPrice> & { reload: () => void };
 	fuel: ApiState<FuelPrice> & { reload: () => void };
 	exchange: ApiState<ExchangeRate> & { reload: () => void };
+	lunar: ApiState<unknown> & { reload: () => void };
 	city: string;
 	activeTool: ToolId;
 	setActiveTool: (tool: ToolId) => void;
@@ -1005,7 +1016,7 @@ function ToolsPage({
 				</span>
 				<small>实用数据置顶，四个便捷工具平铺展示</small>
 			</div>
-			<MarketStrip gold={gold} fuel={fuel} exchange={exchange} city={city} />
+			<MarketStrip gold={gold} fuel={fuel} exchange={exchange} lunar={lunar} city={city} />
 			<ToolWorkspace apiBase={apiBase} activeTool={activeTool} />
 			{query.trim() && (
 				<div className="card tool-query-tip">

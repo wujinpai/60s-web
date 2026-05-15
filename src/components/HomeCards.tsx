@@ -29,11 +29,13 @@ export function MarketStrip({
 	gold,
 	fuel,
 	exchange,
+	lunar,
 	city,
 }: {
 	gold: ApiState<GoldPrice> & { reload: () => void };
 	fuel: ApiState<FuelPrice> & { reload: () => void };
 	exchange: ApiState<ExchangeRate> & { reload: () => void };
+	lunar: ApiState<unknown> & { reload: () => void };
 	city: string;
 }) {
 	const metal = gold.data?.metals?.[0];
@@ -45,6 +47,9 @@ export function MarketStrip({
 		"--";
 	const usdRate = readCurrencyRate(exchange.data, "USD");
 	const usd = usdRate ? (1 / usdRate).toFixed(4) : "--";
+	const lunarData = lunar.data as Record<string, unknown>;
+	const lunarDate = lunarData?.lunar_date || lunarData?.lunar || "--";
+	const solarTerm = lunarData?.jieqi || lunarData?.term || "";
 
 	return (
 		<article className="card market-strip">
@@ -72,9 +77,9 @@ export function MarketStrip({
 				/>
 				<Metric
 					icon={<CalendarClock size={31} />}
-					label="自动刷新"
-					value="10 分钟"
-					sub="手动刷新可跳过缓存"
+					label="农历"
+					value={String(lunarDate)}
+					sub={solarTerm ? `${solarTerm}` : "今日黄历"}
 				/>
 			</div>
 		</article>
@@ -165,23 +170,24 @@ export function ToolShortcuts({
 				{toolDefinitions.map((tool) => {
 					const Icon = tool.icon;
 					const hrefMap: Record<ToolId, string> = {
-						translate: tryBuildUrl(apiBase, "/fanyi", {
-							text: "你好，世界",
-							from: "auto",
-							to: "en",
-						}),
-						qrcode: tryBuildUrl(apiBase, "/qrcode", {
-							text: API_REPO_URL,
-							encoding: "json",
-						}),
-						password: tryBuildUrl(apiBase, "/password", {
-							length: "18",
-							symbols: "true",
-						}),
-						palette: tryBuildUrl(apiBase, "/color/palette", {
-							color: "#0f9b8e",
-						}),
-					};
+							translate: tryBuildUrl(apiBase, "/fanyi", {
+								text: "你好，世界",
+								from: "auto",
+								to: "en",
+							}),
+							qrcode: tryBuildUrl(apiBase, "/qrcode", {
+								text: API_REPO_URL,
+								encoding: "json",
+							}),
+							password: tryBuildUrl(apiBase, "/password", {
+								length: "18",
+								symbols: "true",
+							}),
+							palette: tryBuildUrl(apiBase, "/color/palette", {
+								color: "#0f9b8e",
+							}),
+							lunar: tryBuildUrl(apiBase, "/lunar", {}),
+						};
 					const href = hrefMap[tool.id];
 
 					return setActivePage && setActiveTool ? (
