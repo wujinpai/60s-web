@@ -44,7 +44,7 @@
 
 项目本身是纯前端应用，不依赖数据库或自建后端。默认使用 [vikiboss/60s](https://github.com/vikiboss/60s) 提供的公开 API，也支持在页面设置中切换为自托管 API 地址。
 
-部署案例：https://60s.dogxi.me/
+部署案例：https://hot.gii.cn/
 
 ## 一键部署
 
@@ -77,7 +77,7 @@ docker run -d --name 60s-web -p 8080:80 60s-web
 - **配置管理**：支持 API 连接检测、配置导入导出、恢复默认设置和本地缓存清理。
 - **移动端体验**：支持 iOS 添加到主屏幕、独立窗口运行、可配置移动端导航和离线状态提示。
 - **缓存刷新**：默认 10 分钟缓存，并自动刷新常用数据，减少重复请求。
-- **部署友好**：支持 Vercel、Cloudflare Workers、Cloudflare Pages、Docker、Nginx 静态部署。
+- **部署友好**：支持 Vercel、Cloudflare Workers、Cloudflare Pages、Docker、Nginx、EdgeOne Pages静态部署。
 
 ## 技术栈
 
@@ -89,14 +89,14 @@ docker run -d --name 60s-web -p 8080:80 60s-web
 | 开发语言         | TypeScript                                                      |
 | 图标体系         | lucide-react                                                    |
 | 数据来源         | vikiboss/60s API                                                |
-| 部署方式         | Vercel / Cloudflare Workers / Cloudflare Pages / Docker / Nginx |
+| 部署方式         | Vercel / Cloudflare Workers / Cloudflare Pages / Docker / Nginx / EdgeOne Pages|
 
 ## 快速开始
 
 克隆项目：
 
 ```bash
-git clone https://github.com/dogxii/60s-web.git
+git clone https://github.com/wujinpai/60s-web.git
 cd 60s-web
 ```
 
@@ -140,7 +140,7 @@ bun run preview
 默认 API 地址：
 
 ```text
-https://60s.viki.moe/v2
+https://60s.gii.cn/v2
 ```
 
 你可以在 `设置 -> 默认 API` 中替换为自己的 60s API 服务地址，并点击检测按钮验证 `/60s` 接口是否可访问。配置会保存在浏览器本地，不需要数据库或额外服务。
