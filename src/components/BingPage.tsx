@@ -1,4 +1,4 @@
-import { Download, ExternalLink, Image, RefreshCw } from "lucide-react";
+import { Download, ExternalLink, Image } from "lucide-react";
 import { useApi } from "../hooks/useApi";
 import { CardTitle, EmptyState } from "./ui";
 
@@ -63,9 +63,6 @@ export function BingPage({ apiBase }: { apiBase: string }) {
 									</a>
 								</>
 							)}
-							<button className="outline-button" onClick={bing.reload}>
-								<RefreshCw size={17} /> 刷新
-							</button>
 						</div>
 						<div className="bing-image-container">
 							<img
